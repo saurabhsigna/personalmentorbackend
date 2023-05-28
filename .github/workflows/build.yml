@@ -8,31 +8,35 @@ on:
 
 jobs:
   build:
-
     runs-on: self-hosted
 
     strategy:
       matrix:
         node-version: [18.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - name: set .env
-      env:
-        JWT_SECRET: OsGspAWtqugByGS6FmeJ0A==
-        TRANSFER_TOKEN_SALT: vBX04sHz2tg5GSaLvQe9Kw==
-        ADMIN_JWT_SECRET: 1vKe4uwVrMaKq6GXjuEdtQ==
-        HOST: 0.0.0.0
-        PORT: 1337
-        APP_KEYS: KQY4XuDIeF7Y1hAl3tkYTg==,HW+qLZtdDs0Hx5XfnbrDVw==,TH+IOW2kJZIq8uQWa2ir4Q==,0TZoy+QAjvWT0raAPrEl0w==
-        API_TOKEN_SALT: nlIuvKO6vMI+iC54pby85A==
-    - run: cd my-project
-    - run: npm run build --if-present
-    - run: npm run start
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: set .env
+        env:
+          JWT_SECRET: OsGspAWtqugByGS6FmeJ0A==
+          TRANSFER_TOKEN_SALT: vBX04sHz2tg5GSaLvQe9Kw==
+          ADMIN_JWT_SECRET: 1vKe4uwVrMaKq6GXjuEdtQ==
+          HOST: 0.0.0.0
+          PORT: 1337
+          APP_KEYS: KQY4XuDIeF7Y1hAl3tkYTg==,HW+qLZtdDs0Hx5XfnbrDVw==,TH+IOW2kJZIq8uQWa2ir4Q==,0TZoy+QAjvWT0raAPrEl0w==
+          API_TOKEN_SALT: nlIuvKO6vMI+iC54pby85A==
+
+      - run: cd my-project
+
+      - run: npm run build --if-present
+
+      - run: npm run start
