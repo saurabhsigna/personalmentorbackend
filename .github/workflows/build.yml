@@ -1,40 +1,32 @@
-name: Strapi CI
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: Node.js CI
 
 on:
   push:
-    branches:
-      - main
+    branches: [ "main" ]
   pull_request:
-    branches:
-      - main
+    branches: [ "main" ]
 
 jobs:
   build:
+
     runs-on: self-hosted
 
+    strategy:
+      matrix:
+        node-version: [18.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Set environment variables
-        env:
-          ENV_VAR1: value1
-          ENV_VAR2: value2
-          ENV_VAR3: value3
-
-      - name: Change directory to 'myproject'
-        run: cd my-project
-
-      - name: Build Strapi
-        run: npm run build
-
-      - name: Run Strapi tests
-        run: npm test
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: npm ci
+    - run: cd my-project
+    - run: npm run build --if-present
+    - run: npm run start
